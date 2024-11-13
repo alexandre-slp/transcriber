@@ -21,21 +21,21 @@ SUPPORTED_LANGUAGES = {
     help="Language for transcription. Options: " + ", ".join(
         f"{k} ({v})" for k, v in SUPPORTED_LANGUAGES.items()) + ". Default is 'en' for English."
 )
-@click.option('-m', '--model', default="small",
+@click.option('-m', '--model', 'model_name', default="small",
               help="Whisper model type (e.g., 'tiny', 'base', 'small', 'medium', 'large'). Default is 'small'.")
 @click.option('-o', '--output-text', type=click.Path(),
               help="Path to save the transcribed text. Defaults to the same path as audio with .txt extension.")
 @click.option('-v', '--verbose', is_flag=True, help="Enable detailed logging.")
 @click.option('-L', '--log', type=click.Path(), help="Log file to save errors.")
-def transcribe(input_audio, language, model, output_text, verbose, log):
+def transcribe(input_audio, language, model_name, output_text, verbose, log):
     """Transcribes the provided audio file(s) using the Whisper model."""
 
     # Configure logger
     logging.basicConfig(filename=log, level=logging.DEBUG if verbose else logging.ERROR)
     logger = logging.getLogger(__name__)
 
-    click.echo(f"Loading model '{model}'...")
-    model = whisper.load_model(model)
+    click.echo(f"Loading model '{model_name}'...")
+    model = whisper.load_model(model_name)
 
     # Check if input is a single file or a directory
     if os.path.isfile(input_audio):
@@ -51,7 +51,7 @@ def transcribe(input_audio, language, model, output_text, verbose, log):
         for audio_path in files_to_process:
             try:
                 # Define output path for each file
-                output_file = output_text or os.path.splitext(audio_path)[0] + ".txt"
+                output_file = output_text or f'{os.path.splitext(audio_path)[0]}-{model_name}.txt'
 
                 # Transcribe audio without individual file progress
                 result = model.transcribe(audio_path, language=language)
