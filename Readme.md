@@ -48,7 +48,7 @@ This command will process the audio file and output the transcription to a text 
 ### CLI Options
 
 - `-l`, `--language`: Specify the language of the audio (default is "en").
-- `-m`, `--model`: Whisper model type (e.g., "tiny", "base", "small", "medium", "large").
+- `-m`, `--model`: Whisper model type (e.g., "tiny", "base", "small" [default], "medium", "large"). 
 - `-o`, `--output-text`: Path to save the transcribed text.
 - `-v`, `--verbose`: Enable detailed logging.
 - `-L`, `--log`: Path to a log file for error messages.
